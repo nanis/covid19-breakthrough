@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Known breakthrough COVID19 deaths and hospitalizations among the fully vaccinated</title>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="./apexcharts-3.28.1-min.js"></script>
+        <script>
+            "use strict";
+
+            fetch('./2021-09-10.json').then(function (response) {
+                response.json().then(data => render(data['table']));
+            }).catch(function (err) {
+                console.warn('Something went wrong.', err);
+            });
+
+            function column(table, header, title) {
+                const i = header.indexOf(title);
+                const col = table.flatMap(el => el[i]);
+                return col;
+            }
+
+            function render(table) {
+                const header = table.shift();
+
+                // Fully vaccinated population in millions
+                const vaccinated = column(table, header, 'vaccinated');
+
+                // Deaths from COVID-19 per 100,000 fully vaccinated
+                const deaths = Array.from(
+                    column(table, header, 'deaths_from_covid19'),
+                    (v, i) => v/(10 * vaccinated[i])
+                );
+
+                // Non-fatal hospitalizations due to COVID-19 per 100,000 fully vaccinated
+                const hospitalized = Array.from(
+                    column(table, header, 'hospitalized_from_covid19'),
+                    (v, i) => v/(10 * vaccinated[i])
+                );
+
+                const options = {
+                    series: [
+                        {
+                            name: 'Hospitalized/100K',
+                            type: 'column',
+                            data: hospitalized,
+                        },
+                        {
+                            name: 'Deaths/100K',
+                            type: 'column',
+                            data: deaths,
+                        },
+                        {
+                            name: 'Vaccinated (millions)',
+                            type: 'line',
+                            data: vaccinated,
+                        },
+                    ],
+                    chart: {
+                        height: 600,
+                        width: 800,
+                        stacked: false,
+                        type: 'line',
+                    },
+                    title: {
+                        show: true,
+                        text: 'Hospitalized or fatal COVID-19 vaccine breakthrough cases reported to CDC',
+                    },
+                    xaxis: {
+                        categories: column(table, header, 'date'),
+                    },
+                    yaxis: [
+                        {
+                            labels: {
+                                formatter: function (v) {
+                                    return v.toFixed(1);
+                                },
+                            },
+                            seriesName: 'Hospitalized/100K',
+                            title: {
+                                text: 'Deaths/Hospitalized per 100,000 fully vaccinated',
+                            },
+                        },
+                        {
+                            show: false,
+                            labels: {
+                                formatter: function(v) {
+                                    return v.toFixed(1);
+                                },
+                            },
+                            seriesName: 'Hospitalized/100K',
+                        },
+                        {
+                            labels: {
+                                formatter: function(v) {
+                                    return v.toFixed(0);
+                                },
+                            },
+                            max: 180,
+                            opposite: true,
+                            seriesName: 'Vaccinated',
+                            tickAmount: 6,
+                            title: {
+                                text: 'Fully vaccinated population in millions',
+                            },
+                        },
+                    ],
+                };
+
+                const chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            }
+        </script>
+
+        <p><b>Source:</b> <a href="https://www.cdc.gov/vaccines/covid-19/health-departments/breakthrough-cases.html">COVID-19 Vaccine Breakthrough Case Investigation and Reporting</a></p>
+
+        <p><b>Snapshots:</b> <a href="https://archive.today/https://www.cdc.gov/vaccines/covid-19/health-departments/breakthrough-cases.html">Achived on archive.today</a></p>
+    </body>
+</html>
