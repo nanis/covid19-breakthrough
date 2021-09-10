@@ -1,0 +1,62 @@
+#!perl
+
+use v5.28;
+
+use strict;
+use warnings;
+
+use open ':std';
+
+use feature 'signatures';
+no warnings 'experimental::signatures';
+
+use HTML::TreeBuilder::XPath;
+use Path::Tiny qw( path );
+use Text::CSV_XS qw();
+
+use CDC::Covid19::Data::Breakthrough;
+
+sub extract ($html_ref) {
+    my $tree = HTML::TreeBuilder::XPath->new;
+    $tree->parse($$html_ref);
+
+    return CDC::Covid19::Data::Breakthrough->new($tree);
+}
+
+sub main (@args) {
+    my @table;
+
+    push @table, [
+        sort CDC::Covid19::Data::Breakthrough->columns->@*
+    ];
+
+    if (@args) {
+        my %data;
+
+        for my $file (@args) {
+            my $obs = extract(\path($file)->slurp_utf8);
+
+            $data{$obs->date} = [
+                map $obs->$_, $table[0]->@*
+            ];
+        }
+
+        for my $dt (sort keys %data) {
+            push @table, $data{$dt};
+        }
+    }
+    else {
+        my $obs = process(\do {local $/; <>});
+        push @table, [
+            map $obs->$_, $table[0]->@*
+        ];
+    }
+
+    my $csv = Text::CSV_XS->new;
+
+    for my $row (@table) {
+        $csv->say(\*STDOUT, $row);
+    }
+}
+
+main(@ARGV);

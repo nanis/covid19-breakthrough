@@ -1,0 +1,13 @@
+bin/cdc-breakthrough
+bin/serve.bat
+Changes.md
+lib/CDC/Covid19/Data/Breakthrough.pm
+LICENSE
+Makefile.PL
+MANIFEST
+MANIFEST.SKIP
+README.md
+t/00-load.t
+t/manifest.t
+t/pod-coverage.t
+t/pod.t

@@ -1,0 +1,107 @@
+#!perl
+
+use v5.28;
+
+use strict;
+use warnings;
+
+use open ':std';
+
+use feature 'signatures';
+no warnings 'experimental::signatures';
+
+use Carp qw( croak );
+use HTML::TreeBuilder::XPath;
+use JSON::MaybeXS qw( encode_json );
+use Path::Tiny qw( path );
+use Text::CSV_XS qw();
+use Text::Table::HTML;
+
+use CDC::Covid19::Data::Breakthrough;
+
+sub extract ($html_ref) {
+    my $tree = HTML::TreeBuilder::XPath->new;
+    $tree->parse($$html_ref);
+
+    return CDC::Covid19::Data::Breakthrough->new($tree);
+}
+
+sub data_as_of ($table) {
+    my $col;
+
+    for my $header ($table->[0]) {
+        ($col) = grep $header->[$_] =~ /update/, 0 .. $#$header;
+    }
+
+    return $table->[-1][$col];
+}
+
+sub save_csv ($table) {
+    my $csv = Text::CSV_XS->new;
+    my $file = sprintf 'out/%s.csv', data_as_of($table);
+
+    my $out = path($file)->openw_utf8;
+
+    for my $row ($table->@*) {
+        $csv->say($out, $row);
+    }
+
+    close $out
+        or croak "Failed to close '$file': $!";
+
+    return;
+}
+
+sub save_html ($table) {
+    my $file = sprintf 'out/%s.html', data_as_of($table);
+
+    path($file)->spew_utf8(
+        Text::Table::HTML::table(rows => $table, header_row => 1)
+    );
+
+    return;
+}
+
+sub save_json ($table) {
+    my $file = sprintf 'out/%s.json', data_as_of($table);
+
+    path($file)->spew(encode_json({table => $table}));
+
+    return;
+}
+
+sub main (@args) {
+    my @table;
+
+    push @table, [
+        sort CDC::Covid19::Data::Breakthrough->columns->@*
+    ];
+
+    if (@args) {
+        my %data;
+
+        for my $file (@args) {
+            my $obs = extract(\path($file)->slurp_utf8);
+
+            $data{$obs->date} = [
+                map $obs->$_, $table[0]->@*
+            ];
+        }
+
+        for my $dt (sort keys %data) {
+            push @table, $data{$dt};
+        }
+    }
+    else {
+        my $obs = process(\do {local $/; <>});
+        push @table, [
+            map $obs->$_, $table[0]->@*
+        ];
+    }
+
+    for my $fn (\&save_csv, \&save_html, \&save_json) {
+        $fn->(\@table)
+    }
+}
+
+main(@ARGV);
