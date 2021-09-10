@@ -20,7 +20,7 @@ Originally, this information was to be published every Friday for the period up 
 
 > As CDC and state health departments shift to focus only on investigating vaccine breakthrough cases that result in hospitalization or death, those data will be regularly updated and posted every Friday.
 
-The CDC skipped the update on the Friday immediately prior to the [approval of the Pfizer vaccine (Comirnaty)](https://www.fda.gov/news-events/press-announcements/fda-approves-first-covid-19-vaccine). The update on August 20th was delayed to August 23 and was released after the vaccine approval was announced. Since then, updates have been released on Mondays to reflect information up to the preceding Monday.
+The CDC skipped the update on the Friday immediately prior to the [approval of the Pfizer vaccine (Comirnaty)](https://www.fda.gov/news-events/press-announcements/fda-approves-first-covid-19-vaccine). The update on August 20th was delayed to August 23 and was released after the vaccine approval was announced. After a couple of updates being released on Mondays to reflect information up to the preceding Monday, on Friday, September 10, 2021, the CDC released data covering up to the preceding Tuesday. I am not sure what the schedule will be going forward.
 
 As of September 10, 2021, [CDC continue to state](https://www.cdc.gov/vaccines/covid-19/health-departments/breakthrough-cases.html):
 
