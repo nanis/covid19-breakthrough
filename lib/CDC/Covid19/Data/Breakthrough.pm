@@ -283,7 +283,7 @@ You can find documentation for this module with the perldoc command.
 
 =head1 ACKNOWLEDGEMENTS
 
-As always, I ❤️ Perl and owe thanks to both Perl5 porters and the developers who maintain libraries on L<CPAN|https://metacpan.org>.
+I ❤️ Perl and owe thanks to both Perl5 porters and the developers who maintain libraries on L<CPAN|https://metacpan.org>. As always, all errors and bugs are mine.
 
 =head1 LICENSE AND COPYRIGHT
 
