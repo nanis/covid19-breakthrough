@@ -15,6 +15,7 @@ package CDC::Covid19::Data::Breakthrough 0.001 {
     use constant LAYOUTS => qw(
         CDC::Covid19::Data::Breakthrough::LayoutA
         CDC::Covid19::Data::Breakthrough::LayoutB
+        CDC::Covid19::Data::Breakthrough::LayoutE
         CDC::Covid19::Data::Breakthrough::LayoutD
         CDC::Covid19::Data::Breakthrough::LayoutC
     );

@@ -11,7 +11,7 @@
         <script>
             "use strict";
 
-            fetch('./2021-09-10.json').then(function (response) {
+            fetch('./2021-09-17.json').then(function (response) {
                 response.json().then(data => render(data['table']));
             }).catch(function (err) {
                 console.warn('Something went wrong.', err);
