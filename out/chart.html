@@ -3,15 +3,14 @@
     <head>
         <meta charset="utf-8">
         <title>Known breakthrough COVID19 deaths and hospitalizations among the fully vaccinated</title>
+        <script src="./apexcharts-3.28.1-min.js"></script>
     </head>
-
     <body>
         <div id="chart"></div>
-        <script src="./apexcharts-3.28.1-min.js"></script>
         <script>
             "use strict";
 
-            fetch('./2021-09-17.json').then(function (response) {
+            fetch('https://raw.githubusercontent.com/nanis/covid19-breakthrough/main/out/2021-09-24.json').then(function (response) {
                 response.json().then(data => render(data['table']));
             }).catch(function (err) {
                 console.warn('Something went wrong.', err);
@@ -115,8 +114,11 @@
             }
         </script>
 
-        <p><b>Source:</b> <a href="https://www.cdc.gov/vaccines/covid-19/health-departments/breakthrough-cases.html">COVID-19 Vaccine Breakthrough Case Investigation and Reporting</a></p>
+        <p><b>Code:</b> <a href="https://github.com/nanis/covid19-breakthrough">nanis/covid19-breakthrough on GitHub</a></p>
+
+        <p><b>Data Source:</b> <a href="https://www.cdc.gov/vaccines/covid-19/health-departments/breakthrough-cases.html">COVID-19 Vaccine Breakthrough Case Investigation and Reporting</a></p>
 
         <p><b>Snapshots:</b> <a href="https://archive.today/https://www.cdc.gov/vaccines/covid-19/health-departments/breakthrough-cases.html">Achived on archive.today</a></p>
+
     </body>
 </html>
