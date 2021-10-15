@@ -10,7 +10,7 @@
         <script>
             "use strict";
 
-            fetch('https://raw.githubusercontent.com/nanis/covid19-breakthrough/main/out/2021-10-05.json').then(function (response) {
+            fetch('https://raw.githubusercontent.com/nanis/covid19-breakthrough/main/out/2021-10-15.json').then(function (response) {
                 response.json().then(data => render(data['table']));
             }).catch(function (err) {
                 console.warn('Something went wrong.', err);
